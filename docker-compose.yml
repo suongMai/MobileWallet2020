@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE:wallet2020
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+      - ENV=docker
+      - MONGO_USER:root
+      - MONGO_PASS:example
+      - MONGO_DB:wallet2020
+      gging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "80:80"
+    
