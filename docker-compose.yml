@@ -1,26 +1,34 @@
 version: '3.1'
 services:
-  mongo:
-    image: mongo
-    restart: always
+  mongodb:
+    image: mongo:4.0.8
+    container_name: mongodb
+    restart: unless-stopped
+    command: mongod --auth
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE:wallet2020
-
+      MONGO_INITDB_ROOT_USERNAME: wallet2020
+      MONGO_INITDB_ROOT_PASSWORD: wallet2020
+      MONGO_INITDB_DATABASE: wallet2020
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+      
   webserver:
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - mongo
+      - mongodb
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local
       - ENV=docker
-      - MONGO_USER:root
-      - MONGO_PASS:example
+      - MONGO_USER:wallet2020
+      - MONGO_PASS:wallet2020
       - MONGO_DB:wallet2020
       gging:
       options:
@@ -28,4 +36,15 @@ services:
         max-file: "3"
     ports:
       - "80:80"
-    
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mongodbdata:
+    driver: local
+  appdata:
+    driver: local
