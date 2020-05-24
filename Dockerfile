@@ -4,6 +4,6 @@ WORKDIR /app
 RUN apk add --no-cache --virtual .py_deps build-base python3-dev libffi-dev openssl-dev
 RUN pip install requests
 RUN pip install -r requirements.txt
-EXPOSE 80
+EXPOSE 5000
 ENTRYPOINT [ "python" ]
 CMD [ "app.py" ]
