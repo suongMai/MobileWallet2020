@@ -1,5 +1,27 @@
-version: '3.1'
+version: '3'
 services:
+
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_DEBUG: "False"
+      APP_PORT: 5000
+      MONGODB_DATABASE: wallet2020
+      MONGODB_USERNAME: wallet2020
+      MONGODB_PASSWORD: wallet2020
+      MONGODB_HOSTNAME: mongodb
+    
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+
   mongodb:
     image: mongo:4.0.8
     container_name: mongodb
@@ -15,31 +37,10 @@ services:
       - mongodbdata:/data/db
     networks:
       - backend
-      
-  webserver:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - mongodb
-    environment:
-      - LOAD_EX=n
-      - EXECUTOR=Local
-      - ENV=docker
-      - MONGO_USER:wallet2020
-      - MONGO_PASS:wallet2020
-      - MONGO_DB:wallet2020
-      gging:
-      options:
-        max-size: 10m
-        max-file: "3"
-    ports:
-      - "80:80"
-    networks:
-      - backend
 
 networks:
+  frontend:
+    driver: bridge
   backend:
     driver: bridge
 
@@ -47,4 +48,6 @@ volumes:
   mongodbdata:
     driver: local
   appdata:
+    driver: local
+  nginxdata:
     driver: local
