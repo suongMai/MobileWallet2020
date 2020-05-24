@@ -14,5 +14,4 @@
   sudo docker-compose up
 - go to 127.0.0.1:5000 to see the swager document
 
-
-
+Read the PDF file to get more detail
