@@ -18,7 +18,7 @@ funcsigs==1.0.2
 future==0.18.2
 requests==2.23.0
 requests-async==0.6.2
-rsa==4.0
+rsa==4.7
 selenium==3.141.0
 setproctitle==1.1.10
 soupsieve==2.0
